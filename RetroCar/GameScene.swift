@@ -53,6 +53,7 @@ class GameScene: SKScene {
         view.addGestureRecognizer(swipeRight)
         
         addLines()
+        addCars()
         
     }
     func swipedRight(sender: UISwipeGestureRecognizer){
@@ -112,36 +113,71 @@ class GameScene: SKScene {
     }
     
     func addEnemyCar(){
+        let diceRoll = Int(arc4random_uniform(3))
+        let enemyCar : SKSpriteNode
         
-    
-        let redenemyCar  = SKSpriteNode(imageNamed: "redcar")
-        redenemyCar.size.height = 50
-        redenemyCar.size.width = 15
+        switch diceRoll {
+            
+            case 0 :
+                enemyCar = SKSpriteNode(imageNamed: "redcar")
+                break;
         
-        addChild(redenemyCar)
+            case 1 :
+                enemyCar = SKSpriteNode(imageNamed: "whitecar")
+                break;
+            
+            default:
+                enemyCar = SKSpriteNode(imageNamed: "yellowcar")
+                break;
+        }
         
-        let whiteenemyCar  = SKSpriteNode(imageNamed: "whitecar")
-        redenemyCar.size.height = 50
-        redenemyCar.size.width = 15
         
-        addChild(whiteenemyCar)
+        enemyCar.size.height = 250
+        enemyCar.size.width = 130
         
-        let yellowenemyCar  = SKSpriteNode(imageNamed: "whitecar")
-        yellowenemyCar.size.height = 50
-        yellowenemyCar.size.width = 15
         
-        addChild(yellowenemyCar)
+        let anotherRoll = Int (arc4random_uniform(2))
+        var xPosition: CGFloat = 0
         
-        var moveMeteor: SKAction
-        moveMeteor = SKAction.move (to: CGPoint (x: size.width/2, y: -line.position.y), duration: (3.0))
-        line.run(SKAction.sequence([moveMeteor,SKAction.removeFromParent()]))
+        
+        switch anotherRoll {
+            
+        case 0 :
+            xPosition = 125.0
+            
+            enemyCar.position = CGPoint (x : xPosition , y : size.height)
+            break;
+            
+        case 1 :
+            xPosition = 289.0
+            enemyCar.position = CGPoint (x: xPosition , y : size.height)
+            break;
+            
+        default:
+            print ()
+            break;
+        }
+        
+        addChild(enemyCar)
+        
+        
+        var moveEnemyCar: SKAction
+        moveEnemyCar = SKAction.move (to: CGPoint (x: xPosition, y: -enemyCar.position.y), duration: (3.0))
+        enemyCar.run(SKAction.sequence([moveEnemyCar,SKAction.removeFromParent()]))
     }
+    
     
     
     func addLines() {
         
         run(SKAction.repeatForever(SKAction.sequence([SKAction.run(addWhiteLines), SKAction.wait(forDuration: 1.0)])), withKey:"addEnemies")
         
+        
+    }
+    
+    func addCars(){
+        run (SKAction.repeatForever(SKAction.sequence([SKAction.run(addEnemyCar), SKAction.wait(forDuration: 3.0)])), withKey:"addEnemyCars")
+    
     }
     
     func random() -> CGFloat {
