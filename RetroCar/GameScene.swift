@@ -9,7 +9,16 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+
+struct BodyType {
+    
+    static let None: UInt32 = 0
+    static let EnemyCar: UInt32 = 1
+    static let Bullet: UInt32 = 2
+    static let Hero: UInt32 = 4
+}
+
+class GameScene: SKScene,SKPhysicsContactDelegate {
     
    let hero = SKSpriteNode(imageNamed: "car")
     let side1 = SKSpriteNode()
@@ -27,7 +36,14 @@ class GameScene: SKScene {
         hero.size.width = 130
         
         hero.position = CGPoint(x: xCoord, y: yCoord)
+        hero.zPosition = 1
         
+        hero.physicsBody = SKPhysicsBody(rectangleOf: hero.size)
+        hero.physicsBody?.isDynamic = true
+        hero.physicsBody?.categoryBitMask = BodyType.Hero
+        hero.physicsBody?.contactTestBitMask = BodyType.EnemyCar
+        hero.physicsBody?.collisionBitMask = 0
+        hero.physicsBody?.usesPreciseCollisionDetection = true
         addChild(hero)
     
         side1.size.height = size.height
@@ -55,6 +71,9 @@ class GameScene: SKScene {
         addLines()
         addCars()
         
+        physicsWorld.gravity = CGVector(dx:0,dy:0)
+        physicsWorld.contactDelegate = self
+        
     }
     func swipedRight(sender: UISwipeGestureRecognizer){
         
@@ -62,14 +81,14 @@ class GameScene: SKScene {
         
         if (hero.position.x + heroSpeed >= size.width - side2.size.width) {
             
-            actionMove = SKAction.move(to: CGPoint(x: size.width - hero.size.width , y: hero.position.y), duration: 0.3)
+            actionMove = SKAction.move(to: CGPoint(x: size.width - hero.size.width , y: hero.position.y), duration: 0.2)
             print(size.width - side2.size.width)
             print(hero.position.x + heroSpeed)
         }
             
         else {
             
-            actionMove = SKAction.move(to: CGPoint(x: hero.position.x + 164 , y: hero.position.y), duration: 0.3)
+            actionMove = SKAction.move(to: CGPoint(x: hero.position.x + 164 , y: hero.position.y), duration: 0.2)
             print(size.width - side2.size.width)
             print(hero.position.x + heroSpeed)
         }
@@ -83,12 +102,12 @@ class GameScene: SKScene {
         
         if (hero.position.x - heroSpeed <= side1.size.width) {
             
-            actionMove = SKAction.move(to: CGPoint(x: hero.size.width , y: hero.position.y), duration: 0.3)
+            actionMove = SKAction.move(to: CGPoint(x: hero.size.width , y: hero.position.y), duration: 0.2)
            
         }
         else {
             
-            actionMove = SKAction.move(to: CGPoint(x: hero.position.x - 164, y: hero.position.y), duration: 0.3)
+            actionMove = SKAction.move(to: CGPoint(x: hero.position.x - 164, y: hero.position.y), duration: 0.2)
            
         }
         
@@ -158,6 +177,13 @@ class GameScene: SKScene {
             break;
         }
         
+        
+        enemyCar.physicsBody = SKPhysicsBody(rectangleOf: enemyCar.size)
+        enemyCar.physicsBody?.isDynamic = true
+        enemyCar.physicsBody?.categoryBitMask = BodyType.EnemyCar
+        enemyCar.physicsBody?.contactTestBitMask = BodyType.Hero
+        enemyCar.physicsBody?.collisionBitMask = 0
+        enemyCar.physicsBody?.usesPreciseCollisionDetection = true
         addChild(enemyCar)
         
         
@@ -166,7 +192,93 @@ class GameScene: SKScene {
         enemyCar.run(SKAction.sequence([moveEnemyCar,SKAction.removeFromParent()]))
     }
     
+    func didBegin(_ contact: SKPhysicsContact) {
+        let bodyA = contact.bodyA
+        let bodyB = contact.bodyB
+        
+        let contactA = bodyA.categoryBitMask
+        let contactB = bodyB.categoryBitMask
+        
+        switch contactA {
+            
+        case BodyType.EnemyCar:
+            
+            
+            
+            switch contactB {
+                
+                
+                
+                case BodyType.EnemyCar:
+                
+                break
+                
     
+                case BodyType.Hero:
+                
+                    if let bodyBNode = contact.bodyB.node as? SKSpriteNode {
+                        
+                        heroHitOtherCar(enemyCar: bodyBNode)
+                      
+                        
+                    }
+                    
+                    
+                
+                
+                
+            default:
+                
+                break
+                
+            }
+            
+            
+            
+            case BodyType.Hero:
+            
+            
+            
+                switch contactB {
+                
+                
+                
+                case BodyType.EnemyCar:
+                
+                    
+                    if let bodyBNode = contact.bodyB.node as? SKSpriteNode {
+                        
+                        heroHitOtherCar(enemyCar: bodyBNode)
+                        
+                    }
+                    
+                    
+      
+                
+                case BodyType.Hero:
+                
+                    break
+                
+                
+                
+            default:
+                
+                break
+                
+            }
+            
+            
+            
+            
+        default:
+            
+            break
+            
+        }
+        
+        
+    
+    }
     
     func addLines() {
         
@@ -180,11 +292,39 @@ class GameScene: SKScene {
     
     }
     
-    func random() -> CGFloat {
+    func heroHitOtherCar (enemyCar: SKSpriteNode){
         
-        return CGFloat(Float(arc4random()) / Float(UINT32_MAX))
+        enemyCar.removeFromParent()
         
+        removeAction(forKey: "addEnemyCars")
+        
+        let explosion = SKSpriteNode (imageNamed: "explosion")
+        
+        explosion.size.height = 300.0
+        explosion.size.width = 300.0
+        
+        explosion.position = CGPoint (x: hero.position.x, y: hero.position.y + (hero.size.height/2) )
+        explosion.zPosition = 2
+        addChild(explosion)
+        
+        hero.isPaused = true
+        // Label Code
+        let gameOverLabel = SKLabelNode(fontNamed: "ChalkDuster")
+        
+        gameOverLabel.text = "Game Over"
+        
+        gameOverLabel.fontColor = UIColor.white
+        
+        gameOverLabel.fontSize = 40
+        gameOverLabel.zPosition = 3
+        gameOverLabel.position = CGPoint(x: self.size.width/2, y: self.size.height * 0.83)
+        
+        addChild(gameOverLabel)
+        
+      
     }
+    
+    
     func touchDown(atPoint pos : CGPoint) {
        
     }
