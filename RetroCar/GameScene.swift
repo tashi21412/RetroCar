@@ -23,8 +23,18 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
    let hero = SKSpriteNode(imageNamed: "car")
     let side1 = SKSpriteNode()
     let side2 = SKSpriteNode()
+    var score: Int = 0
+    
+    let heroSound = SKAction.playSoundFileNamed("CarSound.mp3", waitForCompletion: false)
+    let crashSound = SKAction.playSoundFileNamed("crashSound.mp3", waitForCompletion: false)
+    let carPassBy = SKAction.playSoundFileNamed("carPassBy.mp3", waitForCompletion: false)
     
     let heroSpeed: CGFloat  = 95.0
+    
+    let gameScore = SKLabelNode(fontNamed: "ChalkDuster")
+    
+    
+    
     
     override func didMove(to view: SKView) {
         
@@ -45,6 +55,15 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         hero.physicsBody?.collisionBitMask = 0
         hero.physicsBody?.usesPreciseCollisionDetection = true
         addChild(hero)
+        
+        gameScore.text = "Game Over"
+        
+        gameScore.fontColor = UIColor.white
+        
+        gameScore.fontSize = 40
+        gameScore.zPosition = 3
+        gameScore.position = CGPoint(x: self.size.width/2, y: self.size.height * 0.92)
+        addChild(gameScore)
     
         side1.size.height = size.height
         side1.size.width = 50
@@ -70,6 +89,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         
         addLines()
         addCars()
+        playHeroSound()
         
         physicsWorld.gravity = CGVector(dx:0,dy:0)
         physicsWorld.contactDelegate = self
@@ -184,6 +204,8 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         enemyCar.physicsBody?.usesPreciseCollisionDetection = true
         addChild(enemyCar)
         
+        score = score + 1
+        gameScore.text = String(score)
         
         var moveEnemyCar: SKAction
         moveEnemyCar = SKAction.move (to: CGPoint (x: xPosition, y: -enemyCar.position.y), duration: (3.0))
@@ -193,6 +215,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         let bodyA = contact.bodyA
         let bodyB = contact.bodyB
+        
         
         let contactA = bodyA.categoryBitMask
         let contactB = bodyB.categoryBitMask
@@ -286,16 +309,21 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     }
     
     func addCars(){
-        run (SKAction.repeatForever(SKAction.sequence([SKAction.run(addEnemyCar), SKAction.wait(forDuration: 3.0)])), withKey:"addEnemyCars")
+        run (SKAction.repeatForever(SKAction.sequence([SKAction.run(addEnemyCar),carPassBy, SKAction.wait(forDuration: 3.0)])), withKey:"addEnemyCars")
     
     }
     
+    func playHeroSound(){
+        run (SKAction.repeatForever(SKAction.sequence([heroSound, SKAction.wait(forDuration: 5.0)])), withKey:"heroSound")
+        
+    }
     func heroHitOtherCar (enemyCar: SKSpriteNode){
         
         //enemyCar.removeFromParent()
         
         removeAction(forKey: "addEnemyCars")
-        
+        removeAction(forKey: "heroSound")
+        run(crashSound)
         
         let explosion = SKSpriteNode (imageNamed: "explosion")
         

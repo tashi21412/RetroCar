@@ -14,6 +14,9 @@
 		94A42ABD1F46552B008B008F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94A42ABC1F46552B008B008F /* Assets.xcassets */; };
 		94A42AC01F46552B008B008F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94A42ABE1F46552B008B008F /* LaunchScreen.storyboard */; };
 		94A42ACA1F476943008B008F /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 94A42AC91F476943008B008F /* GameScene.sks */; };
+		94A42ACC1F4E3BF5008B008F /* CarSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 94A42ACB1F4E3BF5008B008F /* CarSound.mp3 */; };
+		94A42ACE1F4E3F1D008B008F /* crashSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 94A42ACD1F4E3F1D008B008F /* crashSound.mp3 */; };
+		94A42AD01F4E4580008B008F /* carPassBy.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 94A42ACF1F4E4580008B008F /* carPassBy.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,9 @@
 		94A42ABF1F46552B008B008F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		94A42AC11F46552B008B008F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		94A42AC91F476943008B008F /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		94A42ACB1F4E3BF5008B008F /* CarSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = CarSound.mp3; sourceTree = "<group>"; };
+		94A42ACD1F4E3F1D008B008F /* crashSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = crashSound.mp3; sourceTree = "<group>"; };
+		94A42ACF1F4E4580008B008F /* carPassBy.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = carPassBy.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +50,9 @@
 			children = (
 				94A42AAE1F46552B008B008F /* RetroCar */,
 				94A42AAD1F46552B008B008F /* Products */,
+				94A42ACB1F4E3BF5008B008F /* CarSound.mp3 */,
+				94A42ACD1F4E3F1D008B008F /* crashSound.mp3 */,
+				94A42ACF1F4E4580008B008F /* carPassBy.mp3 */,
 			);
 			sourceTree = "<group>";
 		};
@@ -134,6 +143,9 @@
 				94A42ABB1F46552B008B008F /* Main.storyboard in Resources */,
 				94A42ABD1F46552B008B008F /* Assets.xcassets in Resources */,
 				94A42AC01F46552B008B008F /* LaunchScreen.storyboard in Resources */,
+				94A42AD01F4E4580008B008F /* carPassBy.mp3 in Resources */,
+				94A42ACE1F4E3F1D008B008F /* crashSound.mp3 in Resources */,
+				94A42ACC1F4E3BF5008B008F /* CarSound.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
