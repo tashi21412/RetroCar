@@ -82,15 +82,13 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         if (hero.position.x + heroSpeed >= size.width - side2.size.width) {
             
             actionMove = SKAction.move(to: CGPoint(x: size.width - hero.size.width , y: hero.position.y), duration: 0.2)
-            print(size.width - side2.size.width)
-            print(hero.position.x + heroSpeed)
+            
         }
             
         else {
             
             actionMove = SKAction.move(to: CGPoint(x: hero.position.x + 164 , y: hero.position.y), duration: 0.2)
-            print(size.width - side2.size.width)
-            print(hero.position.x + heroSpeed)
+            
         }
         
         hero.run(actionMove)
@@ -294,9 +292,10 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     
     func heroHitOtherCar (enemyCar: SKSpriteNode){
         
-        enemyCar.removeFromParent()
+        //enemyCar.removeFromParent()
         
         removeAction(forKey: "addEnemyCars")
+        
         
         let explosion = SKSpriteNode (imageNamed: "explosion")
         
@@ -307,7 +306,9 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         explosion.zPosition = 2
         addChild(explosion)
         
+        
         hero.isPaused = true
+        enemyCar.isPaused = true
         // Label Code
         let gameOverLabel = SKLabelNode(fontNamed: "ChalkDuster")
         
