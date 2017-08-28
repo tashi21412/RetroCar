@@ -39,11 +39,13 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     override func didMove(to view: SKView) {
         
         backgroundColor = SKColor.gray
-        let xCoord: CGFloat = 125.0
-        let yCoord = size.height * 0.2
+       
         
-        hero.size.height = 250
-        hero.size.width = 130
+        hero.size.height = size.height * 1/4
+        hero.size.width = size.width * 1/4
+        
+        let xCoord: CGFloat = size.width * 1/6 + hero.size.width * 0.7
+        let yCoord = size.height * 0.2
         
         hero.position = CGPoint(x: xCoord, y: yCoord)
         hero.zPosition = 1
@@ -66,14 +68,14 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         addChild(gameScore)
     
         side1.size.height = size.height
-        side1.size.width = 50
+        side1.size.width = 1/6 * size.width
         
         side1.position = CGPoint (x: 0 + side1.size.width/2, y: side1.size.height/2)
         side1.color = SKColor.green
         addChild(side1)
         
         side2.size.height = size.height
-        side2.size.width = 50
+        side2.size.width = 1/6 * size.width
         
         side2.position = CGPoint (x: size.width - side1.size.width/2, y: side1.size.height/2)
         side2.color = SKColor.green
@@ -107,7 +109,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
             
         else {
             
-            actionMove = SKAction.move(to: CGPoint(x: hero.position.x + 164 , y: hero.position.y), duration: 0.2)
+            actionMove = SKAction.move(to: CGPoint(x: size.width / 2 + hero.size.width * 2/3 , y: hero.position.y), duration: 0.2)
             
         }
         
@@ -125,7 +127,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         }
         else {
             
-            actionMove = SKAction.move(to: CGPoint(x: hero.position.x - 164, y: hero.position.y), duration: 0.2)
+            actionMove = SKAction.move(to: CGPoint(x: size.width * 1/6 + hero.size.width * 0.7, y: hero.position.y), duration: 0.2)
            
         }
         
@@ -169,8 +171,8 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         }
         
         
-        enemyCar.size.height = 250
-        enemyCar.size.width = 130
+        enemyCar.size.height = size.height * 1/4
+        enemyCar.size.width = size.width * 1/4
         
         
         let anotherRoll = Int (arc4random_uniform(2))
@@ -180,13 +182,13 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         switch anotherRoll {
             
         case 0 :
-            xPosition = 125.0
+            xPosition = size.width * 1/6 + hero.size.width * 0.7
             
             enemyCar.position = CGPoint (x : xPosition , y : size.height)
             break;
             
         case 1 :
-            xPosition = 289.0
+            xPosition = size.width / 2 + hero.size.width * 2/3
             enemyCar.position = CGPoint (x: xPosition , y : size.height)
             break;
             
